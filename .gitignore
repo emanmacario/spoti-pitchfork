@@ -1,2 +1,11 @@
+# PyCharm
 .idea/
 venv/
+__pycache__/
+
+# Spotify API secrets
+spotify_client_credentials.py
+.cache-*
+
+# Debugging files
+*.json
