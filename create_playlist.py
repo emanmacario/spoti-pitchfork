@@ -69,15 +69,15 @@ def get_args():
 
     # Set arguments and options
     parser = argparse.ArgumentParser(description='Creates Spotify playlists for the user')
-    parser.add_argument('--tn', required=False, default="Pitchfork 'Best New Tracks'",
+    parser.add_argument('--tn', required=False, default="Pitchfork's 'Best New Tracks'",
                         help="Name of 'best new tracks' playlist")
     parser.add_argument('--td', required=False, default=f'The best new tracks as of {date_str}',
                         help="Description of 'best new tracks' playlist")
-    parser.add_argument('--an', required=False, default="Pitchfork 'Best New Albums'",
+    parser.add_argument('--an', required=False, default="Pitchfork's 'Best New Albums'",
                         help="Name of 'best new albums' playlist")
     parser.add_argument('--ad', required=False, default=f'The best new albums as of {date_str}',
                         help="Description of 'best new albums' playlist")
-    parser.add_argument('--rn', required=False, default="Pitchfork 'Best New Reissues'",
+    parser.add_argument('--rn', required=False, default="Pitchfork's 'Best New Reissues'",
                         help="Name of 'best new reissues' playlist")
     parser.add_argument('--rd', required=False, default=f'The best new reissues as of {date_str}',
                         help="Description of 'best new reissues' playlist")

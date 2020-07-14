@@ -1,6 +1,10 @@
 import feedparser
 import re
 
+# This file contains utility functions for parsing the
+# Pitchfork RSS feeds and returning data structures
+# that contain the RSS data
+
 # URLs for Pitchfork RSS feeds
 BASE_URL = 'http://pitchfork.com/rss/reviews/best/%s'
 REISSUES_URL = BASE_URL % 'reissues/'
@@ -30,7 +34,7 @@ def get_best_new_tracks():
         match = pattern.match(entry.title)
         if match is None:
             print(f"No match for {entry.title}")
-            print("---" * 25)
+            print("-" * 50)
         else:
             artist = match.group('artist')
             track = match.group('track')
@@ -38,13 +42,13 @@ def get_best_new_tracks():
             print(f"Artist: {artist}")
             print(f"Track: {track}")
             print(match.groupdict())
-            print("---" * 25)
+            print("-" * 50)
             best_new_tracks.append(match.groupdict())
 
     return best_new_tracks
 
 
-def get_best_new_albums():
+def get_best_new_albums(url=ALBUMS_URL):
     """
     Parses the Pitchfork 'best new albums' RSS feed
     and returns an array of album dicts (including
@@ -57,7 +61,7 @@ def get_best_new_albums():
                           ''', re.VERBOSE)
 
     # Parse the RSS feed
-    feed = feedparser.parse(ALBUMS_URL)
+    feed = feedparser.parse(url)
     print("Number of RSS posts: ", len(feed.entries))
 
     # Extract the best new albums
@@ -66,7 +70,7 @@ def get_best_new_albums():
         match = pattern.match(entry.title)
         if match is None:
             print(f"No match for {entry.title}")
-            print("---" * 25)
+            print("-" * 50)
         else:
             artist = match.group('artist')
             album = match.group('album')
@@ -74,17 +78,17 @@ def get_best_new_albums():
             print(f"Artist: {artist}")
             print(f"Album: {album}")
             print(match.groupdict())
-            print("---" * 25)
+            print("-" * 50)
             best_new_albums.append(match.groupdict())
 
     return best_new_albums
 
 
 def get_best_new_reissues():
-
-    pass
-
-
-if __name__ == "__main__":
-    s = get_best_new_albums()
-    print(s)
+    """
+    Parses the Pitchfork 'best new reissues' RSS feed
+    and returns an array of reissue dicts (including
+    reissue album name and artist name)
+    :return: list of albums
+    """
+    return get_best_new_albums(url=REISSUES_URL)

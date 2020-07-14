@@ -1,9 +1,8 @@
-import json
-import spotipy
-from spotipy.oauth2 import SpotifyOAuth
-from spotify_client_credentials import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, USERNAME, SCOPE
+from config.auth import sp
 
-# Spotify Search API Link: https://developer.spotify.com/documentation/web-api/reference/search/search/
+# This file 'search.py' contains auxiliary functions that use
+# the 'spotipy' wrapper for the Spotify API, to search
+# for albums and tracks
 
 
 def search_for_track(artist, track):
@@ -14,21 +13,10 @@ def search_for_track(artist, track):
     :param debug: True or False indicating whether to write search results to a JSON file
     :return: Spotify track ID
     """
-    # Initialise the Spotify API by setting scope and credentials
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=SCOPE,
-                                                   client_id=CLIENT_ID,
-                                                   client_secret=CLIENT_SECRET,
-                                                   redirect_uri=REDIRECT_URI,
-                                                   username=USERNAME))
     # Perform the search
     result = sp.search(q=f"artist:{artist} track:{track}", type="track", limit=1)
 
-    # Debugging
-    debug = False
-    if debug:
-        with open('result.json', 'w', encoding='utf-8') as f:
-            json.dump(result, f, indent=4)
-
+    # Logging
     print('-'*50)
     print(f"Searched for track '{track}' by '{artist}'")
     items = result['tracks']['items']
@@ -50,22 +38,10 @@ def search_for_album(artist, album):
     :param album: album name
     :return: Spotify album ID
     """
-    # Initialise Spotify API by passing app credentials (authorisation code flow)
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=SCOPE,
-                                                   client_id=CLIENT_ID,
-                                                   client_secret=CLIENT_SECRET,
-                                                   redirect_uri=REDIRECT_URI,
-                                                   username=USERNAME))
-
     # Perform the search
     result = sp.search(q=f"artist:{artist} album:{album}", type="album", limit=1)
 
-    # Debugging
-    debug = True
-    if debug:
-        with open('result-album.json', 'w', encoding='utf-8') as f:
-            json.dump(result, f, indent=4)
-
+    # Logging
     print('-' * 50)
     print(f"Searched for album '{album}' by '{artist}'")
     items = result['albums']['items']
@@ -124,11 +100,7 @@ def get_tracks_for_albums(album_ids):
     :param album_ids: list of Spotify album IDs
     :return: list of Spotify track IDs
     """
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=SCOPE,
-                                                   client_id=CLIENT_ID,
-                                                   client_secret=CLIENT_SECRET,
-                                                   redirect_uri=REDIRECT_URI,
-                                                   username=USERNAME))
+    # Retrieve the track IDs
     track_ids = []
     for album_id in album_ids:
         album_tracks = sp.album_tracks(album_id)
@@ -139,32 +111,3 @@ def get_tracks_for_albums(album_ids):
 
     print("Length of track_ids: ", len(track_ids))
     return track_ids
-
-
-
-
-from pitchfork_rss import get_best_new_tracks, get_best_new_albums
-
-if __name__ == "__main__":
-    """
-    best_new_tracks = get_best_new_tracks()
-    for entry in best_new_tracks:
-        artist = entry['artist']
-        track = entry['track']
-        search_for_track(artist, track)
-    """
-    # best_new_albums = get_best_new_albums()
-    # for entry in best_new_albums:
-    #     artist = entry['artist']
-    #     album = entry['album']
-    #     search_for_album(artist, album)
-
-    pass
-
-
-
-
-
-
-
-
