@@ -1,3 +1,6 @@
+import sys
+sys.path.append('../config/')
+
 from config.auth import sp
 
 # This file 'search.py' contains auxiliary functions that use

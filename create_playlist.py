@@ -1,8 +1,8 @@
 import argparse
 from datetime import date
 from config.auth import sp
-from pitchfork_rss import get_best_new_tracks, get_best_new_albums, get_best_new_reissues
-from search import search_for_tracks, search_for_albums, get_tracks_for_albums
+from utils.pitchfork_rss import get_best_new_tracks, get_best_new_albums, get_best_new_reissues
+from utils.search import search_for_tracks, search_for_albums, get_tracks_for_albums
 
 
 def create_best_new_tracks_playlist(user_id, args):

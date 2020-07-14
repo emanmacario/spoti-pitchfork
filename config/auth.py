@@ -1,6 +1,6 @@
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-from spotify_client_credentials import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, USERNAME, SCOPE
+from config.spotify_client_credentials import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, USERNAME, SCOPE
 
 # Initialise Spotify API by passing app credentials and scope (authorisation code flow)
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=SCOPE,
