@@ -13,7 +13,6 @@ def search_for_track(artist, track):
     Uses the Spotify search API to search for a track for a given artist
     :param artist: artist name
     :param track: track name
-    :param debug: True or False indicating whether to write search results to a JSON file
     :return: Spotify track ID
     """
     # Perform the search
@@ -80,8 +79,6 @@ def search_for_tracks(tracks):
 def search_for_albums(albums):
     """
     Uses the Spotify search API to search for a list of albums
-    :param tracks: A list of track dictionaries
-    :return: list of Spotify album IDs
     :param albums: list of album dictionaries
     :return: list of Spotify album IDs
     """
@@ -99,7 +96,7 @@ def search_for_albums(albums):
 def get_tracks_for_albums(album_ids):
     """
     Uses the Spotify API to retrieve the track
-    IDs of all of the respective albums. Yields
+    IDs of all of the respective albums
     :param album_ids: list of Spotify album IDs
     :return: list of Spotify track IDs
     """

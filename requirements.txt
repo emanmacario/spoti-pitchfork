@@ -1,3 +1,2 @@
-spotipy
-feedparser
-spotipy
+spotipy==2.13.0
+feedparser==5.2.1
