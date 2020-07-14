@@ -80,7 +80,10 @@ def search_for_album(artist, album):
         album_uri = result['albums']['items'][0]['uri']
         print(f"Found album: {album_uri}")
     else:
+        album_uri = None
         print("Album not found on Spotify")
+
+    return album_uri
 
 
 def search_for_tracks(tracks):
@@ -99,6 +102,47 @@ def search_for_tracks(tracks):
             track_ids.append(track_uri)
 
     return track_ids
+
+
+
+def search_for_tracks_kwargs(albums):
+    """
+    Uses the Spotify search API to search for albums,
+    and return the track IDs of those albums
+    :param albums: list of album dictionaries
+    :return: list of Spotify track IDs
+    """
+    track_ids = []
+    for entry in albums:
+        artist = entry['artist']
+        album = entry['album']
+        print('-'*50)
+        print(f"Searching for tracks for album '{album}' by '{artist}'")
+        album_id = search_for_album(artist, album)
+
+        scope = 'user-library-read'
+        sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope,
+                                                       client_id=CLIENT_ID,
+                                                       client_secret=CLIENT_SECRET,
+                                                       redirect_uri=REDIRECT_URI,
+                                                       username=USERNAME))
+        if album_id is not None:
+            print("Album found!")
+            res = sp.album_tracks(album_id)
+            for track in res['items']:
+                track_id = track['id']
+                track_ids.append(track_id)
+
+            debug = False
+            if debug:
+                with open('result-album-tracks.json', 'w', encoding='utf-8') as f:
+                    json.dump(res, f, indent=4)
+        else:
+            print("Album not found!")
+
+    return track_ids
+
+
 
 
 def search_for_albums(albums):
@@ -131,11 +175,18 @@ if __name__ == "__main__":
         track = entry['track']
         search_for_track(artist, track)
     """
+    # best_new_albums = get_best_new_albums()
+    # for entry in best_new_albums:
+    #     artist = entry['artist']
+    #     album = entry['album']
+    #     search_for_album(artist, album)
+
     best_new_albums = get_best_new_albums()
-    for entry in best_new_albums:
-        artist = entry['artist']
-        album = entry['album']
-        search_for_album(artist, album)
+    search_for_tracks_kwargs(best_new_albums)
+
+
+
+
 
 
 

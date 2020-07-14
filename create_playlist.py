@@ -43,6 +43,7 @@ def create_best_new_tracks_playlist():
 
 
 
+from search import search_for_tracks_kwargs
 
 def main():
     args = get_args()
@@ -56,8 +57,10 @@ def main():
     user_id = sp.me()['id']
     playlist_id = sp.user_playlist_create(user_id, args.playlist, description=args.description)['id']
     best_new_albums = get_best_new_albums()
-    album_ids = search_for_albums(best_new_albums)
-    sp.user_playlist_add_tracks(user_id, playlist_id, album_ids)
+    # TODO: Use list comprehension here. Add tracks endpoint request only asccetps 100 at a time
+    track_ids = search_for_tracks_kwargs(best_new_albums)[:50]
+    # album_ids = search_for_albums(best_new_albums)
+    sp.user_playlist_add_tracks(user_id, playlist_id, track_ids)
 
 
 
