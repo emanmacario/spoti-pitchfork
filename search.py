@@ -1,12 +1,10 @@
 import json
 import spotipy
-from pprint import pprint
 from spotipy.oauth2 import SpotifyOAuth
-from spotify_client_credentials import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, USERNAME
+from spotify_client_credentials import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, USERNAME, SCOPE
 
 # Spotify Search API Link: https://developer.spotify.com/documentation/web-api/reference/search/search/
 
-# scope = 'playlist-modify-public'
 
 def search_for_track(artist, track):
     """
@@ -17,15 +15,13 @@ def search_for_track(artist, track):
     :return: Spotify track ID
     """
     # Initialise the Spotify API by setting scope and credentials
-    scope = 'user-library-read'
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope,
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=SCOPE,
                                                    client_id=CLIENT_ID,
                                                    client_secret=CLIENT_SECRET,
                                                    redirect_uri=REDIRECT_URI,
                                                    username=USERNAME))
     # Perform the search
     result = sp.search(q=f"artist:{artist} track:{track}", type="track", limit=1)
-    # pprint(result)
 
     # Debugging
     debug = False
@@ -47,7 +43,6 @@ def search_for_track(artist, track):
     return track_uri
 
 
-
 def search_for_album(artist, album):
     """
     Uses the Spotify search API to search for an album for a given artist
@@ -55,9 +50,8 @@ def search_for_album(artist, album):
     :param album: album name
     :return: Spotify album ID
     """
-    # Initialise the Spotify API by setting scope and credentials
-    scope = 'user-library-read'
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope,
+    # Initialise Spotify API by passing app credentials (authorisation code flow)
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=SCOPE,
                                                    client_id=CLIENT_ID,
                                                    client_secret=CLIENT_SECRET,
                                                    redirect_uri=REDIRECT_URI,
@@ -104,47 +98,6 @@ def search_for_tracks(tracks):
     return track_ids
 
 
-
-def search_for_tracks_kwargs(albums):
-    """
-    Uses the Spotify search API to search for albums,
-    and return the track IDs of those albums
-    :param albums: list of album dictionaries
-    :return: list of Spotify track IDs
-    """
-    track_ids = []
-    for entry in albums:
-        artist = entry['artist']
-        album = entry['album']
-        print('-'*50)
-        print(f"Searching for tracks for album '{album}' by '{artist}'")
-        album_id = search_for_album(artist, album)
-
-        scope = 'user-library-read'
-        sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope,
-                                                       client_id=CLIENT_ID,
-                                                       client_secret=CLIENT_SECRET,
-                                                       redirect_uri=REDIRECT_URI,
-                                                       username=USERNAME))
-        if album_id is not None:
-            print("Album found!")
-            res = sp.album_tracks(album_id)
-            for track in res['items']:
-                track_id = track['id']
-                track_ids.append(track_id)
-
-            debug = False
-            if debug:
-                with open('result-album-tracks.json', 'w', encoding='utf-8') as f:
-                    json.dump(res, f, indent=4)
-        else:
-            print("Album not found!")
-
-    return track_ids
-
-
-
-
 def search_for_albums(albums):
     """
     Uses the Spotify search API to search for a list of albums
@@ -164,6 +117,31 @@ def search_for_albums(albums):
     return album_ids
 
 
+def get_tracks_for_albums(album_ids):
+    """
+    Uses the Spotify API to retrieve the track
+    IDs of all of the respective albums. Yields
+    :param album_ids: list of Spotify album IDs
+    :return: list of Spotify track IDs
+    """
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=SCOPE,
+                                                   client_id=CLIENT_ID,
+                                                   client_secret=CLIENT_SECRET,
+                                                   redirect_uri=REDIRECT_URI,
+                                                   username=USERNAME))
+    track_ids = []
+    for album_id in album_ids:
+        album_tracks = sp.album_tracks(album_id)
+
+        for track in album_tracks['items']:
+            track_id = track['id']
+            track_ids.append(track_id)
+
+    print("Length of track_ids: ", len(track_ids))
+    return track_ids
+
+
+
 
 from pitchfork_rss import get_best_new_tracks, get_best_new_albums
 
@@ -181,8 +159,8 @@ if __name__ == "__main__":
     #     album = entry['album']
     #     search_for_album(artist, album)
 
-    best_new_albums = get_best_new_albums()
-    search_for_tracks_kwargs(best_new_albums)
+    pass
+
 
 
 
