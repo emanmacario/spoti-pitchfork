@@ -50,9 +50,9 @@ The CLI requires a [Spotify Developer](https://developer.spotify.com/) account a
     -r, --reissues  Create playlist for 'best new reissues'
     ```
 
-    **Note**: default playlist names will generated if not specified
+    **Note**: default playlist names and descriptions will be generated if not specified
 
-5. Sample command to create best new tracks and reissues playlists:
+5. A sample command to create best new tracks and reissues playlists
     ```bash
     $ python create_playlists.py -tr
     ```
