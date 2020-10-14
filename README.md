@@ -52,6 +52,11 @@ The CLI requires a [Spotify Developer](https://developer.spotify.com/) account a
 
     **Note**: default playlist names will generated if not specified
 
+5. Sample command to create best new tracks and reissues playlists:
+    ```bash
+    $ python create_playlists.py -tr
+    ```
+
 
 ## License
 MIT © Emmanuel Macario
