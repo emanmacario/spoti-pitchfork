@@ -1,2 +1,2 @@
-spotipy==2.13.0
+spotipy==2.22.1
 feedparser==5.2.1
